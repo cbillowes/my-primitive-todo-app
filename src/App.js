@@ -35,6 +35,17 @@ const App = () => {
     }
   };
 
+  const toggle = async (todo) => {
+    const updatedTodo = {
+      ...todo,
+      completed: !todo.completed,
+    };
+    const result = await api.updateTodo(updatedTodo);
+    if (result) {
+      setAndSortTodos(todos.map((t) => (t.id === todo.id ? updatedTodo : t)));
+    }
+  };
+
   return (
     <>
       <form onSubmit={(e) => e.preventDefault()}>
@@ -46,8 +57,18 @@ const App = () => {
         todos.length > 0 &&
         todos.map((todo) => {
           return (
-            <div key={todo.id}>
+            <div
+              key={todo.id}
+              style={{
+                textDecoration: todo.completed ? 'line-through' : '',
+              }}
+            >
               <button onClick={() => remove(todo.id)}>&times;</button>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onClick={() => toggle(todo)}
+              />
               {todo.created} | {todo.id} | {todo.text}
             </div>
           );

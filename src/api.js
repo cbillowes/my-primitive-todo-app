@@ -55,10 +55,27 @@ const deleteTodo = async (id) => {
   throw `Task ${id} was not deleted.`;
 };
 
+const updateTodo = async (task) => {
+  const todo = {
+    ...task,
+    modified: new Date().getTime(),
+  };
+  const response = await fetch('/.netlify/functions/updateTodo', {
+    body: JSON.stringify(todo),
+    method: 'POST',
+  });
+  const updatedTodo = await respond(response);
+  return {
+    ...updatedTodo,
+    ...todo,
+  };
+};
+
 const api = {
   getTodos,
   createTodo,
   deleteTodo,
+  updateTodo,
 };
 
 export default api;
