@@ -5,10 +5,14 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const textbox = useRef();
 
+  const setAndSortTodos = (items) => {
+    setTodos(items.sort((x, y) => y.created - x.created));
+  }
+
   useEffect(() => {
     const loadTodos = async () => {
       const data = await api.getTodos();
-      setTodos(data);
+      setAndSortTodos(data);
     };
     loadTodos();
   }, []);
@@ -18,7 +22,7 @@ const App = () => {
     if (task) {
       const result = await api.createTodo(task);
       if (result) {
-        setTodos([...todos, result]);
+        setAndSortTodos([...todos, result]);
         textbox.current.value = '';
       }
     }
@@ -36,7 +40,7 @@ const App = () => {
         todos.map((todo) => {
           return (
             <div key={todo.id}>
-              {todo.id} | {todo.text}
+              {todo.created} | {todo.id} | {todo.text}
             </div>
           );
         })}
