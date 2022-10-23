@@ -7,7 +7,7 @@ const App = () => {
 
   const setAndSortTodos = (items) => {
     setTodos(items.sort((x, y) => y.created - x.created));
-  }
+  };
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -28,6 +28,13 @@ const App = () => {
     }
   };
 
+  const remove = async (id) => {
+    const result = await api.deleteTodo(id);
+    if (result) {
+      setAndSortTodos(todos.filter((t) => t.id !== id));
+    }
+  };
+
   return (
     <>
       <form onSubmit={(e) => e.preventDefault()}>
@@ -40,6 +47,7 @@ const App = () => {
         todos.map((todo) => {
           return (
             <div key={todo.id}>
+              <button onClick={() => remove(todo.id)}>&times;</button>
               {todo.created} | {todo.id} | {todo.text}
             </div>
           );
