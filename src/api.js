@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 const wrapError = (response, message) => {
   return {
     status: response.status,
@@ -24,8 +26,26 @@ const getTodos = async () => {
   return await respond(response);
 };
 
+const createTodo = async (text) => {
+  const todo = {
+    id: uuid(),
+    text,
+    created: new Date().getTime(),
+  };
+  const response = await fetch('/.netlify/functions/createTodo', {
+    body: JSON.stringify(todo),
+    method: 'POST',
+  });
+  const createdTodo = await respond(response);
+  return {
+    ...createdTodo,
+    ...todo,
+  };
+};
+
 const api = {
   getTodos,
+  createTodo,
 };
 
 export default api;
