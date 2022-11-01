@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import api from './api';
+import Fork from './Fork';
 import './styles.css';
 
 const formatDate = (date) => {
@@ -119,6 +120,7 @@ const App = () => {
 
   return (
     <div className="bg-slate-900 min-h-screen p-5">
+      <Fork />
       <div className="mx-auto py-8 max-w-4xl">
         <h1 className="uppercase font-bold text-slate-300 mb-1">
           ✅ My awesome task list
