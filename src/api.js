@@ -1,22 +1,22 @@
 import { v4 as uuid } from 'uuid';
 
-const wrapError = (response, message) => {
-  return {
+const throwError = (response, message) => {
+  throw new Error({
     status: response.status,
     message,
     response,
-  };
+  });
 };
 
 const respond = (response) => {
   if (response.status >= 500) {
-    throw wrapError(response, 'Internal Server Error');
+    throwError(response, 'Internal Server Error');
   }
   if (response.status === 404) {
-    throw wrapError(response, 'Not Found');
+    throwError(response, 'Not Found');
   }
   if (response.status >= 400) {
-    throw wrapError(response, 'Bad Request');
+    throwError(response, 'Bad Request');
   }
   return response.json();
 };
@@ -52,7 +52,7 @@ const deleteTodo = async (id) => {
   if (deletedTodo.deleted) {
     return id;
   }
-  throw `Task ${id} was not deleted.`;
+  throw new Error(`Task ${id} was not deleted.`);
 };
 
 const updateTodo = async (task) => {
